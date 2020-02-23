@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Azeroth.STSM
 {
-    public enum OperationTypes
+    public enum HandlerOptions
     {
         提交=0,
         同意=1,
@@ -14,7 +14,7 @@ namespace Azeroth.STSM
         删除=4
     }
 
-    public enum ApproveTypes
+    public enum HandlerTypes
     {
         单人审批=0,
         多人审批=1
@@ -28,10 +28,11 @@ namespace Azeroth.STSM
 
     public enum FlowStates
     {
-        审批中=0,
-        通过=1,
-        未通过=2,
-        已删除=3
+        处理中=0,
+        已完成=1,
+        被驳回=2,
+        已删除=3,
+        已通过=4
             
     }
 
@@ -58,52 +59,60 @@ namespace Azeroth.STSM
         /// <summary>
         /// 创建人姓名，冗余
         /// </summary>
+        [System.ComponentModel.DataAnnotations.MaxLength(50)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string CreatorName { get; set; }
 
         /// <summary>
-        /// 审批人Id
+        /// 处理人Id
         /// </summary>
-        public long ApproverId { get; set; }
+        public long HandlerId { get; set; }
 
         /// <summary>
-        /// 审批时间
+        /// 处理时间
         /// </summary>
-        public DateTime ApproveTime { get; set; }
+        public DateTime HandlerTime { get; set; }
 
         /// <summary>
-        /// 审批人姓名 冗余
+        /// 处理人姓名 冗余
         /// </summary>
-        public string ApproverName { get; set; }
+        [System.ComponentModel.DataAnnotations.MaxLength(50)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings =true)]
+        public string HandlerName { get; set; }
 
         /// <summary>
         /// 操作类别 
         /// </summary>
-        public OperationTypes OperationType { get; set; }
+        public HandlerOptions HandlerOption { get; set; }
 
         /// <summary>
-        /// 操作标识（用于画流程图）
+        /// 流程节点编号（用于画流程图）
         /// </summary>
-        public Guid HandleNo { get; set; }
+        public Guid FlowNo { get; set; }
 
         /// <summary>
-        /// 上级操作标志（用于画流程图）
+        /// 流程节点编号（父级）（用于画流程图）
         /// </summary>
-        public Guid HandleNoParent { get; set; }
+        public Guid FlowNoParent { get; set; }
 
         /// <summary>
-        /// 操作分组名称（用于画流程图）
+        /// 流程分组名称（用于画流程图）
         /// </summary>
-        public string HandleGroupName { get; set; }
+        [System.ComponentModel.DataAnnotations.MaxLength(50)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string FlowGroupName { get; set; }
 
         /// <summary>
         /// 流程上下文，表单数据
         /// </summary>
+        [System.ComponentModel.DataAnnotations.MaxLength(50)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string FlowContext { get; set; }
 
         /// <summary>
-        /// 审批类别
+        /// 处理场景
         /// </summary>
-        public ApproveTypes ApproveType { get; set; }
+        public HandlerTypes HandlerType { get; set; }
 
         /// <summary>
         /// WF的Id 外键
@@ -111,10 +120,13 @@ namespace Azeroth.STSM
         public Guid WFInstanceId { get; set; }
 
         /// <summary>
-        /// 数据状态-逻辑
+        /// 记录状态（逻辑）
         /// </summary>
         public RowStates RowState { get; set; }
 
+        /// <summary>
+        /// 流程状态
+        /// </summary>
         public FlowStates FlowState { get; set; }
 
     }

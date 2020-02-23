@@ -9,6 +9,9 @@ namespace Azeroth.STSM
     {
         static void Main(string[] args)
         {
+            DbContext db = new DbContext();
+            var lst= db.FlowInfo.ToList();
+
             Console.WriteLine("0----发起请假");
             Console.WriteLine("1----部门领导登陆");
             Console.WriteLine("2----Hr登陆");
@@ -40,20 +43,20 @@ namespace Azeroth.STSM
             DbContext dbcontext = new DbContext();
             FlowInfo fl = new FlowInfo()
             {
-                ApproveType = ApproveTypes.单人审批,
-                ApproveTime = DateTime.Now,
+                HandlerType = HandlerTypes.单人审批,
+                HandlerTime = DateTime.Now,
                 CreatedTime = DateTime.Now,
                 CreatorId = 0,
                 CreatorName = "员工",
-                FlowState = FlowStates.审批中,
-                HandleGroupName = "提交",
-                HandleNo = Guid.NewGuid(),
-                HandleNoParent = Guid.Empty,
+                FlowState = FlowStates.处理中,
+                FlowGroupName = "提交",
+                FlowNo = Guid.NewGuid(),
+                FlowNoParent = Guid.Empty,
                 Id = DateTime.Now.Ticks,
-                OperationType = OperationTypes.提交,
+                HandlerOption = HandlerOptions.提交,
                 RowState = RowStates.正常,
-                ApproverId = 0,
-                ApproverName = "员工"
+                HandlerId = 0,
+                HandlerName = "员工"
             };
 
             LeaveInput input = new LeaveInput();

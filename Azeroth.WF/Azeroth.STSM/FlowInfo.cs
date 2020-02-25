@@ -5,16 +5,22 @@ using System.Text;
 
 namespace Azeroth.STSM
 {
+    /// <summary>
+    /// 操作类别
+    /// </summary>
     public enum HandlerOptions
     {
-        提交=0,
+        新建=0,
         同意=1,
-        不同意=2,
+        驳回=2,
         撤回=3,
         删除=4
     }
 
-    public enum HandlerTypes
+    /// <summary>
+    /// 场景类别
+    /// </summary>
+    public enum NodeTypes
     {
         单人审批=0,
         多人审批=1
@@ -26,14 +32,24 @@ namespace Azeroth.STSM
         归档=1
     }
 
+    /// <summary>
+    /// 流程状态
+    /// </summary>
     public enum FlowStates
     {
-        处理中=0,
-        已完成=1,
-        被驳回=2,
-        已删除=3,
-        已通过=4
-            
+        未提交=0,
+        处理中=1,
+        已完结=2,
+    }
+
+    /// <summary>
+    /// 流程结果
+    /// </summary>
+    public enum FlowResults
+    {
+        None=0,
+        通过=1,
+        驳回=2
     }
 
     [System.ComponentModel.DataAnnotations.Schema.Table("FlowInfo")]
@@ -64,21 +80,38 @@ namespace Azeroth.STSM
         public string CreatorName { get; set; }
 
         /// <summary>
-        /// 处理人Id
+        /// 当前处理人Id
         /// </summary>
         public long HandlerId { get; set; }
 
         /// <summary>
-        /// 处理时间
+        /// 当前处理人处理时间
         /// </summary>
         public DateTime HandlerTime { get; set; }
 
         /// <summary>
-        /// 处理人姓名 冗余
+        /// 当前处理人姓名 冗余
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLength(50)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings =true)]
         public string HandlerName { get; set; }
+
+        /// <summary>
+        /// 上一步处理人Id
+        /// </summary>
+        public long PreviousHandlerId { get; set; }
+
+        /// <summary>
+        /// 上一步处理人处理时间
+        /// </summary>
+        public DateTime PreviousHandlerTime { get; set; }
+
+        /// <summary>
+        /// 上一步处理人姓名 冗余
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.MaxLength(50)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string PreviousHandlerName { get; set; }
 
         /// <summary>
         /// 操作类别 
@@ -105,14 +138,13 @@ namespace Azeroth.STSM
         /// <summary>
         /// 流程上下文，表单数据
         /// </summary>
-        [System.ComponentModel.DataAnnotations.MaxLength(50)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string FlowContext { get; set; }
 
         /// <summary>
-        /// 处理场景
+        /// 场景类别
         /// </summary>
-        public HandlerTypes HandlerType { get; set; }
+        public NodeTypes NodeType { get; set; }
 
         /// <summary>
         /// WF的Id 外键
@@ -120,7 +152,7 @@ namespace Azeroth.STSM
         public Guid WFInstanceId { get; set; }
 
         /// <summary>
-        /// 记录状态（逻辑）
+        /// 删除标识
         /// </summary>
         public RowStates RowState { get; set; }
 
@@ -128,6 +160,15 @@ namespace Azeroth.STSM
         /// 流程状态
         /// </summary>
         public FlowStates FlowState { get; set; }
+
+        /// <summary>
+        /// 流程结果
+        /// </summary>
+        public FlowResults FlowResult { get; set; }
+        /// <summary>
+        /// 书签，配合WF的持久化
+        /// </summary>
+        public string BookmarkName { get; set; }
 
     }
 }
